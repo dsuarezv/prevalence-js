@@ -19,11 +19,12 @@ function App() {
             <Chart 
                 data={data}
                 xAxis={{
-                    min: 1,
+                    min: 0,
                     max: data.length,
                     scale: 'linear',
                     title: 'Prevalence',
-                    field: 'id'
+                    field: 'id', 
+                    steps: 20
                 }}
                 yAxis={{
                     min: 0,
@@ -31,7 +32,8 @@ function App() {
                     scale: 'log',
                     title: 'Identifiers',
                     field: 'value',
-                    reversed: true
+                    reversed: true,
+                    steps: 10
                 }}
                 zAxis={{
                     min: 0,
