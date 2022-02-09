@@ -9,7 +9,7 @@ export function getRandomData(numElements, initialDate) {
     for (let i = 0; i < numElements; i++) {
         const isOutlier = Math.random() > 0.92;
         var value = isOutlier ? getRndInteger(1, min / 20) : getRndInteger(min, max);
-        result.push({ id: i, date: new Date(initialEpoch + 60000 * i), value, z: getRndInteger(0, 2) * 3 });
+        result.push({ id: i, date: new Date(initialEpoch + 60000 * i), value, z: getRndInteger(1, 3) * 3 });
     }
 
     return result;
@@ -24,11 +24,7 @@ export function getCalibrationData() {
         { id: 0, value: 0, z: 5},
         { id: 0, value: 1000, z: 5},
         { id: 3, value: 0, z: 5},
-        { id: 3, value: 1000, z: 5},
-        
-        { id: 1, value: 10, z: 5},
-        { id: 1, value: 100, z: 5},
-        { id: 1, value: 500, z: 5},
+        { id: 3, value: 1000, z: 5}
     ]
 }
 

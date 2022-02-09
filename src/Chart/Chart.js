@@ -9,11 +9,19 @@ const defaultAxisOptions = {
     title: 'Axis',
     field: null,
     reversed: false,
-    values: null
+    labelCallback: null
 };
 
 const defaultProps = {
-
+    data: null, 
+    xAxis: null,
+    yAxis: null, 
+    zAxis: null, 
+    width: 1000, 
+    height: 400,
+    selectedIndex: -1,
+    onItemClicked: null, 
+    onItemHover: null
 }
 
 
@@ -23,10 +31,12 @@ const Chart = (p) => {
     const yAxis = { ...defaultAxisOptions, ...p.yAxis };
     const zAxis = { ...defaultAxisOptions, ...p.zAxis };
     
+    p = {...defaultProps, ...p};
+
     const maxZ = 20;
     const vw = 1000;
     const vh = 400;
-    const left = 40;
+    const left = 50;
     const right = 20;
     const top = 100;
     const bottom = 50;
@@ -78,8 +88,6 @@ const Chart = (p) => {
         return obj[fieldName];
     }
 
-    
-
     const getXAxis = () => {
         return (
             <>
@@ -92,7 +100,6 @@ const Chart = (p) => {
                         </Fragment>
                     )
                 })}
-
             </>
         )
     }
@@ -102,7 +109,8 @@ const Chart = (p) => {
             <>
                 <line x1={left} y1={bottom} x2={left} y2={vh - top} stroke={axisStroke} />
                 {getAxisDivisionPoints(yAxis, getY).map((scaled, i) => {
-                    const yPos = vh - scaled.pos + 3;       // Text is reversed twice to address the coordinate change in svg.
+                    const yPos = vh - scaled.pos + 3;        // Text is reversed twice to address the coordinate change in svg.
+                    if (scaled.value === null) return null;
                     return (
                         <Fragment key={i}>
                             <line x1={left - 5} x2={left} y1={scaled.pos} y2={scaled.pos} stroke={axisStroke} />
@@ -114,12 +122,14 @@ const Chart = (p) => {
         )
     }
 
-    const getAxisDivisionPoints = (axis, valueGetter) => {
+    const getAxisDivisionPoints = (axis, positionGetter) => {
         const result = [];
         const step = (axis.max - axis.min) / axis.steps;
 
         for (let i = axis.min; i <= axis.max; i += step) {
-            result.push({value: i, pos: valueGetter(i) });
+            let value = i;
+            if (axis.labelCallback) value = axis.labelCallback(i);
+            result.push({value, pos: positionGetter(i) });
         }
 
         return result;
@@ -136,8 +146,7 @@ const Chart = (p) => {
 
     const invokeEvent = (eventHandler, index, item) => {
         if (!eventHandler) return;
-
-
+        eventHandler(index, item);
     }
 
     return (
@@ -150,35 +159,36 @@ const Chart = (p) => {
             }}
         >
             <defs>
-                <clipPath id="chartView">
+                <clipPath id="chartArea">
                     <rect x={left} y={bottom} width={vw - left - right} height={vh - bottom} />
                 </clipPath>
             </defs>
             {getXAxis()}
             {getYAxis()}
             {/* {debugBoxes()} */}
-            {p.data && p.data.map((item, i) => {
-                const isSelected = p.selectedIndex === i;
-                const cx = getX(getDataField(item, xAxis.field));
-                const cy = getY(getDataField(item, yAxis.field));
-                const cz = getZ(getDataField(item, zAxis.field));
-                return (
-                    <Fragment key={i}>
-                        {isSelected && <line x1={cx} x2={cx} y1={bottom} y2={vh - (top / 2) } stroke='orange' />}
-                        <circle 
-                            cx={cx}
-                            cy={cy}
-                            r={cz || maxZ}
-                            fill={isSelected ? 'rgba(255, 255, 255, 0.5)' : 'rgba(255, 255, 255, 0.2)'}
-                            clipPath="url(#chartView)"
-                            onClick={() => p.onItemClicked(i, item)}
-                            onMouseEnter={() => p.onItemHover(i, item)}
-                            onMouseLeave={() => p.onItemHover(-1, null)}
-                        />
-                        
-                    </Fragment>
-                )
-            })}
+            <g clipPath="url(#chartArea)">
+                {p.data && p.data.map((item, i) => {
+                    const isSelected = p.selectedIndex === i;
+                    const cx = getX(getDataField(item, xAxis.field));
+                    const cy = getY(getDataField(item, yAxis.field));
+                    const cz = getZ(getDataField(item, zAxis.field));
+                    return (
+                        <Fragment key={i}>
+                            {isSelected && <line x1={cx} x2={cx} y1={bottom} y2={vh - top} stroke='orange' />}
+                            <circle 
+                                cx={cx}
+                                cy={cy}
+                                r={cz || maxZ}
+                                fill={isSelected ? 'rgba(255, 255, 255, 0.5)' : 'rgba(255, 255, 255, 0.2)'}
+                                onClick={() => invokeEvent(p.onItemClicked, i, item)}
+                                onMouseEnter={() => invokeEvent(p.onItemHover, i, item)}
+                                onMouseLeave={() => invokeEvent(p.onItemHover, -1, null)}
+                            />
+                            
+                        </Fragment>
+                    )
+                })}
+            </g>
         </svg>
     )
 }

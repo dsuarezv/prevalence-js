@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { isValidElement, useState } from 'react';
 import './App.css';
 import Chart from './Chart/Chart';
 import { getCalibrationData, getRandomData, getStaticData } from './data';
@@ -6,6 +6,16 @@ import { getCalibrationData, getRandomData, getStaticData } from './data';
 
 const data = getRandomData(100, new Date());
 //const data = getCalibrationData();
+
+
+const logScaleVisibleLabels = [1, 2, 10, 20, 100, 200];
+const logScaleVisibleTicks =  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 400, 500, 600, 700, 800, 900]
+
+function logScaleLabelHandler(val) {
+    if (logScaleVisibleLabels.includes(val)) return val;
+    if (logScaleVisibleTicks.includes(val)) return '';
+    return null;
+}
 
 
 function App() {
@@ -34,7 +44,8 @@ function App() {
                     title: 'Identifiers',
                     field: 'value',
                     reversed: true,
-                    steps: 10
+                    steps: 1000,
+                    labelCallback: logScaleLabelHandler
                 }}
                 zAxis={{
                     min: 0,
