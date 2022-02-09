@@ -36,9 +36,8 @@ const Chart = (p) => {
         return (value <= 0) ? 1 : value;
     }
 
-    const scale = (scaleMin, scaleMax, value, axis, start, total) => {
+    const scale = (scaleMin, scaleMax, value, axis, start, end, total) => {
         let result = 0;
-
         
         if (axis.scale === 'log') {
             // logarithmic
@@ -53,10 +52,10 @@ const Chart = (p) => {
         }
 
         if (axis.reversed) {
-            result = total - start - result;
+            result = (axis === xAxis) ? total - end - result : total - start - result;
         }
         else {
-            result += start;
+            result += (axis === yAxis) ? end : start;
         }
 
 
@@ -64,15 +63,15 @@ const Chart = (p) => {
     }
 
     const getX = (value) => {
-        return scale(left, vw - right, value, xAxis, left, vw);
+        return scale(left, vw - right, value, xAxis, left, right, vw);
     }
 
     const getY = (value) => {
-        return scale(bottom, vh - top, value, yAxis, top, vh);
+        return scale(bottom, vh - top, value, yAxis, top, bottom, vh);
     }
 
     const getZ = (value) => {
-        return scale(0, maxZ, value, zAxis, 0, maxZ);
+        return scale(0, maxZ, value, zAxis, 0, 0, maxZ);
     }
 
     const getDataField = (obj, fieldName) => {
@@ -103,7 +102,7 @@ const Chart = (p) => {
             <>
                 <line x1={left} y1={bottom} x2={left} y2={vh - top} stroke={axisStroke} />
                 {getAxisDivisionPoints(yAxis, getY).map((scaled, i) => {
-                    const yPos = vh - scaled.pos + 3;
+                    const yPos = vh - scaled.pos + 3;       // Text is reversed twice to address the coordinate change in svg.
                     return (
                         <Fragment key={i}>
                             <line x1={left - 5} x2={left} y1={scaled.pos} y2={scaled.pos} stroke={axisStroke} />

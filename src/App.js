@@ -24,7 +24,8 @@ function App() {
                     scale: 'linear',
                     title: 'Prevalence',
                     field: 'id', 
-                    steps: 20
+                    steps: 20,
+                    reversed: false
                 }}
                 yAxis={{
                     min: 0,
