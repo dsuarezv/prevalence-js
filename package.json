@@ -13,7 +13,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && rm -rf docs && mv build docs && rm docs/static/js/*.map && rm docs/static/css/*.map",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
