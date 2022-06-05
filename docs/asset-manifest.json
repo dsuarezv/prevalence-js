@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.1e21f6eb.css",
-    "main.js": "/static/js/main.09d9b721.js",
-    "static/js/787.a082df5b.chunk.js": "/static/js/787.a082df5b.chunk.js",
-    "index.html": "/index.html",
-    "main.1e21f6eb.css.map": "/static/css/main.1e21f6eb.css.map",
-    "main.09d9b721.js.map": "/static/js/main.09d9b721.js.map",
-    "787.a082df5b.chunk.js.map": "/static/js/787.a082df5b.chunk.js.map"
+    "main.css": "/prevalence-js/static/css/main.e632e834.css",
+    "main.js": "/prevalence-js/static/js/main.6e4db396.js",
+    "static/js/787.a082df5b.chunk.js": "/prevalence-js/static/js/787.a082df5b.chunk.js",
+    "index.html": "/prevalence-js/index.html",
+    "main.e632e834.css.map": "/prevalence-js/static/css/main.e632e834.css.map",
+    "main.6e4db396.js.map": "/prevalence-js/static/js/main.6e4db396.js.map",
+    "787.a082df5b.chunk.js.map": "/prevalence-js/static/js/787.a082df5b.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.1e21f6eb.css",
-    "static/js/main.09d9b721.js"
+    "static/css/main.e632e834.css",
+    "static/js/main.6e4db396.js"
   ]
 }
